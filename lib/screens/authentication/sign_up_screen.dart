@@ -15,12 +15,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
+          onPressed: Navigator.of(context).pop,
+        ),
+      ),
       body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
             SizedBox(height: SizeConfig.screenHeight! * 0.02),
             Text(
-              'Create a new account',
+              'Create a new \naccount',
               style: headingStyle,
             ),
             SizedBox(height: SizeConfig.screenHeight! * 0.07),

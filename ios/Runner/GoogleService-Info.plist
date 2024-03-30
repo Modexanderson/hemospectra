@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>579667227744-elmtf07lhvr9esmg0s859ajs2pukifmn.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.579667227744-elmtf07lhvr9esmg0s859ajs2pukifmn</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>579667227744-tglp4k2uk46oerc9hgk7tlb68qc0333u.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD9-igkL7pD5l-kp6jhBoMNlzOHUpbtkMM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>579667227744</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.hemospectra.ios</string>
+	<key>PROJECT_ID</key>
+	<string>hemospectra-3c87f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hemospectra-3c87f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:579667227744:ios:bb5155587e5437b640bf05</string>
+</dict>
+</plist>

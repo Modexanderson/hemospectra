@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "579667227744",
+    "project_id": "hemospectra-3c87f",
+    "storage_bucket": "hemospectra-3c87f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579667227744:android:df957045b763fd3c40bf05",
+        "android_client_info": {
+          "package_name": "com.hemospectra.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "579667227744-tglp4k2uk46oerc9hgk7tlb68qc0333u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hemospectra.android",
+            "certificate_hash": "6dce84042dd4b14113a593c00e0efc0e1006cd73"
+          }
+        },
+        {
+          "client_id": "579667227744-k6ko7j5gqvqnh88kknad51fq6q02k6g9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOnY8R3re8DEBGuh4NV_KpaJgTmBzOLik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "579667227744-k6ko7j5gqvqnh88kknad51fq6q02k6g9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "579667227744-elmtf07lhvr9esmg0s859ajs2pukifmn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hemospectra.ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

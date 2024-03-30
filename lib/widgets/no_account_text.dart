@@ -19,6 +19,7 @@ class NoAccountText extends StatelessWidget {
             fontSize: getProportionateScreenWidth(16),
           ),
         ),
+        const SizedBox(width: 10,),
         GestureDetector(
           onTap: () {
             Navigator.push(context,

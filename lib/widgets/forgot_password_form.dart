@@ -32,23 +32,18 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(screenPadding)),
-        child: Column(
-          children: [
-            buildEmailFormField(),
-            SizedBox(height: getProportionateScreenHeight(30)),
-            SizedBox(height: SizeConfig.screenHeight! * 0.1),
-            CustomButton(
-              text: 'Send verification email',
-              onPressed: sendVerificationEmailButtonCallback,
-            ),
-            SizedBox(height: SizeConfig.screenHeight! * 0.1),
-            const NoAccountText(),
-            SizedBox(height: getProportionateScreenHeight(30)),
-          ],
-        ),
+      child: Column(
+        children: [
+          buildEmailFormField(),
+          SizedBox(height: getProportionateScreenHeight(30)),
+          CustomButton(
+            text: 'Send verification email',
+            onPressed: sendVerificationEmailButtonCallback,
+          ),
+          SizedBox(height: SizeConfig.screenHeight! * 0.1),
+          const NoAccountText(),
+          SizedBox(height: getProportionateScreenHeight(30)),
+        ],
       ),
     );
   }
@@ -57,10 +52,9 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     return CustomTextFormField(
       controller: emailFieldController,
       keyboardType: TextInputType.emailAddress,
-      hintText: 'Enter email',
-      labelText: 'email',
+      hintText: 'Email',
       suffixIcon: const Icon(
-        Icons.mail,
+        Icons.mail_outline,
       ),
       validator: (value) {
         if (value!.isEmpty) {

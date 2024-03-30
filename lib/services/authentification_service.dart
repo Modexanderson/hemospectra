@@ -135,12 +135,6 @@ class AuthentificationService {
     BuildContext context, {
     required String email,
     required String password,
-    String? fullName,
-    DateTime? dateOfBirth,
-    String? gender,
-    String? country,
-    String? state,
-    String? role,
   }) async {
     try {
       final UserCredential userCredential =
@@ -153,12 +147,6 @@ class AuthentificationService {
       await UserDatabaseHelper().createNewUser(
         uid: uid,
         email: email,
-        fullName: fullName,
-        dateOfBirth: dateOfBirth,
-        gender: gender,
-        country: country,
-        state: state,
-        role: role,
       );
       return true;
     } on FirebaseAuthException catch (e) {
@@ -170,46 +158,8 @@ class AuthentificationService {
     }
   }
 
-  // Future<bool> signUpWithGoogle() async {
-  //   try {
-  //     final GoogleSignInAccount? googleSignInAccount =
-  //         await GoogleSignIn().signIn();
-  //     if (googleSignInAccount == null) {
-  //       // The user canceled the sign-in process
-  //       return false;
-  //     }
-
-  //     final GoogleSignInAuthentication googleSignInAuthentication =
-  //         await googleSignInAccount.authentication;
-  //     final AuthCredential credential = GoogleAuthProvider.credential(
-  //       accessToken: googleSignInAuthentication.accessToken,
-  //       idToken: googleSignInAuthentication.idToken,
-  //     );
-
-  //     final UserCredential userCredential =
-  //         await _firebaseAuth!.signInWithCredential(credential);
-
-  //     final String uid = userCredential.user!.uid;
-
-  //     if (!userCredential.user!.emailVerified) {
-  //       await userCredential.user!.sendEmailVerification();
-  //     }
-
-  //     await UserDatabaseHelper().createNewUser(uid);
-
-  //     return true;
-  //   } on FirebaseAuthException catch (e) {
-  //     // Handle FirebaseAuthException
-  //     print(e.message);
-  //     return false;
-  //   } catch (e) {
-  //     // Handle other exceptions
-  //     print(e.toString());
-  //     return false;
-  //   }
-  // }
-
-  Future<bool> signUpWithGoogle(BuildContext context, {
+  Future<bool> signUpWithGoogle(
+    BuildContext context, {
     String? fullName,
     DateTime? dateOfBirth,
     String? gender,
@@ -248,13 +198,7 @@ class AuthentificationService {
 
         await UserDatabaseHelper().createNewUser(
           uid: uid,
-        email: email,
-        fullName: fullName,
-        dateOfBirth: dateOfBirth,
-        gender: gender,
-        country: country,
-        state: state,
-        role: role,
+          email: email,
         );
       }
 
@@ -270,49 +214,6 @@ class AuthentificationService {
       return false;
     }
   }
-
-  // Future<bool> signUpWithApple(BuildContext context) async {
-  //   try {
-  //     final AuthorizationCredentialAppleID appleCredential =
-  //         await SignInWithApple.getAppleIDCredential(scopes: [
-  //       AppleIDAuthorizationScopes.email,
-  //       AppleIDAuthorizationScopes.fullName,
-  //     ]);
-
-  //     final String nonce = generateNonce(); // Generate a nonce
-  //     final AuthCredential credential = OAuthProvider('apple.com').credential(
-  //       idToken: appleCredential.identityToken,
-  //       rawNonce: nonce,
-  //     );
-
-  //     final UserCredential userCredential =
-  //         await _firebaseAuth!.signInWithCredential(credential);
-
-  //     final String uid = userCredential.user!.uid;
-  //     final String email = appleCredential.email ?? '';
-
-  //     if (!userCredential.user!.emailVerified) {
-  //       await userCredential.user!.sendEmailVerification();
-  //     }
-
-  //     // Check if the user already exists in the database
-  //     if (!(await UserDatabaseHelper().userExists(uid))) {
-  //       // User doesn't exist, create a new user
-  //       await UserDatabaseHelper().createNewUser(uid, email);
-  //     }
-
-  //     return true;
-  //   } on FirebaseAuthException catch (e) {
-  //     String errorMessage = getLocalizedErrorMessage(e.code, context);
-  //     ShowSnackBar().showSnackBar(context, errorMessage);
-  //     print(e.message);
-  //     return false;
-  //   } catch (e) {
-  //     // Handle other exceptions
-  //     print(e.toString());
-  //     return false;
-  //   }
-  // }
 
   Future<void> signOut() async {
     await firebaseAuth.signOut();

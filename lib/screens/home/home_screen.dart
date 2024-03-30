@@ -44,13 +44,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-              Container(
-                child: const Text(
-                  'Hi Name',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                ),
+              const Text(
+                'Hi Name',
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
               CarouselSlider(
                 items: carouselItems.map((item) {
@@ -99,11 +97,10 @@ class _HomeScreenState extends State<HomeScreen> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Patient Records'),
+                  Text('Patient Records', style: TextStyle(fontSize: 16),),
                   Text('See all'),
                 ],
               ),
-              const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
                   itemCount: patientRecords.length,

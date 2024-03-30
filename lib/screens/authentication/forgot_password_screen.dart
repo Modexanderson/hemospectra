@@ -18,17 +18,16 @@ class ForgotPasswordScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
       children: [
         SizedBox(height: SizeConfig.screenHeight! * 0.04),
-                Text('Forgot Password',
+                Text('Forgot your \nPassword?',
                   style: headingStyle,
                 ),
                 const Text(
                   'Please enter the email address linked to your account',
-                  textAlign: TextAlign.center,
                 ),
-                SizedBox(height: SizeConfig.screenHeight! * 0.1),
-                ForgotPasswordForm(),
+                const ForgotPasswordForm(),
       ]
     ),
     );

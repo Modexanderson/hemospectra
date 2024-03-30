@@ -18,20 +18,24 @@ class UserDatabaseHelper {
   Future<void> createNewUser({
     required String uid,
     required String email,
+     String? phone,
      String? fullName,
      DateTime? dateOfBirth,
      String? gender,
      String? country,
      String? state,
+     String? city,
      String? role,
   }) async {
     await firestore.collection('users').doc(uid).set({
       'user_email': email,
+      'phone': phone,
       'full_name': fullName,
       'date_of_birth': dateOfBirth,
       'gender': gender,
       'country': country,
       'state': state,
+      'city': city,
       'role': role,
     });
   }

@@ -39,23 +39,17 @@ class _SignInFormState extends State<SignInForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formkey,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(screenPadding)),
-        child: Column(
-          children: [
-            buildEmailFormField(),
-            SizedBox(height: getProportionateScreenHeight(30)),
-            buildPasswordFormField(),
-            SizedBox(height: getProportionateScreenHeight(30)),
-            buildForgotPasswordWidget(context),
-            SizedBox(height: getProportionateScreenHeight(30)),
-            CustomButton(
-              text: 'Sign In',
-              onPressed: signInButtonCallback,
-            ),
-          ],
-        ),
+      child: Column(
+        children: [
+          buildEmailFormField(),
+          buildPasswordFormField(),
+          buildForgotPasswordWidget(context),
+          SizedBox(height: getProportionateScreenHeight(30)),
+          CustomButton(
+            text: 'Sign In',
+            onPressed: signInButtonCallback,
+          ),
+        ],
       ),
     );
   }
@@ -87,8 +81,7 @@ class _SignInFormState extends State<SignInForm> {
     return CustomTextFormField(
       controller: passwordFieldController,
       obscureText: !isPasswordVisible,
-      hintText: 'Enter password',
-      labelText: 'Password',
+      hintText: 'Password',
       suffixIcon: GestureDetector(
         onTap: () {
           // Toggle the visibility of the password
@@ -97,7 +90,7 @@ class _SignInFormState extends State<SignInForm> {
           });
         },
         child: Icon(
-          isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+          isPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
         ),
       ),
       validator: (value) {
@@ -116,10 +109,9 @@ class _SignInFormState extends State<SignInForm> {
     return CustomTextFormField(
       controller: emailFieldController,
       keyboardType: TextInputType.emailAddress,
-      hintText: 'Enter email',
-      labelText: 'Email',
+      hintText: 'Email',
       suffixIcon: const Icon(
-        Icons.mail,
+        Icons.mail_outline,
       ),
       validator: (value) {
         if (emailFieldController.text.isEmpty) {

@@ -15,7 +15,7 @@ class Screens extends StatefulWidget {
 
 class _ScreensState extends State<Screens> {
   int _selectedIndex = 0;
-  List<String> _titles = ['Home', 'Test', 'Resources'];
+  final List<String> _titles = ['Home', 'Test', 'Resources'];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,7 +34,7 @@ class _ScreensState extends State<Screens> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications_outlined),
             onPressed: () {
               // Handle notification button press
             },
@@ -79,7 +79,7 @@ class _ScreensState extends State<Screens> {
                         10), // Set border radius for the selected item
                   ),
                   child: Icon(
-                    Icons.home, // Icon for Home
+                    Icons.home_outlined, // Icon for Home
                     color: _selectedIndex == 0
                         ? Colors.white
                         : Colors.grey, // Set icon color based on selected index
@@ -99,7 +99,7 @@ class _ScreensState extends State<Screens> {
                         10), // Set border radius for the selected item
                   ),
                   child: Icon(
-                    Icons.assignment, // Icon for Test
+                    Icons.medical_information_outlined, // Icon for Test
                     color: _selectedIndex == 1
                         ? Colors.white
                         : Colors.grey, // Set icon color based on selected index
@@ -119,7 +119,7 @@ class _ScreensState extends State<Screens> {
                         10), // Set border radius for the selected item
                   ),
                   child: Icon(
-                    Icons.book, // Icon for Resources
+                    Icons.video_settings_sharp, // Icon for Resources
                     color: _selectedIndex == 2
                         ? Colors.white
                         : Colors.grey, // Set icon color based on selected index
@@ -146,7 +146,7 @@ class _ScreensState extends State<Screens> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ScanningScreen(),
+                      builder: (context) => const ScanningScreen(),
                     ));
                 // Handle scan action here
               },

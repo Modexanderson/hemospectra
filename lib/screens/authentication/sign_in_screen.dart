@@ -62,24 +62,24 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
+      appBar: AppBar(
+        
+      ),
       body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
-            SizedBox(height: SizeConfig.screenHeight! * 0.04),
             Text(
-              'Welcome Back',
+              'Welcome \nBack',
               style: TextStyle(
                 fontSize: getProportionateScreenWidth(28),
                 fontWeight: FontWeight.bold,
                 height: 1.5,
               ),
             ),
-            Text(
-              'Sign in with Password and Email',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: SizeConfig.screenHeight! * 0.08),
+            
+            SizedBox(height: SizeConfig.screenHeight! * 0.01),
             SignInForm(),
             SizedBox(height: SizeConfig.screenHeight! * 0.02),
             const NoAccountText(),

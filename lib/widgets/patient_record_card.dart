@@ -5,7 +5,7 @@ import '../models/patient_record.dart';
 class PatientRecordCard extends StatelessWidget {
   final PatientRecord patientRecord;
 
-  PatientRecordCard({required this.patientRecord});
+  const PatientRecordCard({super.key, required this.patientRecord});
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +15,30 @@ class PatientRecordCard extends StatelessWidget {
     String formattedDateTime = "${now.day}/${now.month}/${now.year}";
     return Card(
       elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(6.0),
         child: Row(
           children: [
             // Image
             CachedNetworkImage(
-              width: 50,
+              width: 100,
               height: 100,
               imageUrl:
                   "https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&w=600",
-              placeholder: (context, url) => Center(child: const CircularProgressIndicator()),
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
               errorWidget: (context, url, error) => const Icon(Icons.error),
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(10), // Adjust the value as needed
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
             // Spacer between image and text
             const SizedBox(width: 20),
@@ -38,34 +50,50 @@ class PatientRecordCard extends StatelessWidget {
                 children: [
                   Text(
                     patientRecord.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                   // Age and Gender
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Icon(Icons.square, color: Colors.red),
-                          SizedBox(width: 5),
-                          Text('Age: 60'),
+                          Icon(
+                            Icons.square,
+                            color: Colors.red,
+                            size: 15,
+                          ),
+                          Text(
+                            'Age: 60',
+                            style: TextStyle(fontSize: 12),
+                          ),
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Icon(Icons.square, color: Colors.green),
+                          Icon(Icons.square, color: Colors.green, size: 15),
                           SizedBox(width: 5),
-                          Text('Gender: Male'),
+                          Text(
+                            'Gender: Male',
+                            style: TextStyle(fontSize: 12),
+                          ),
                         ],
                       ),
                     ],
                   ),
-                  const Divider(),
+                  const Divider(height: 3),
                   // Disease detection
-                  _buildDetectionRow('No disease detected', Colors.green, formattedDateTime),
-                  const Divider(),
-                  _buildDetectionRow('Malaria Detected', Colors.red, formattedDateTime),
-                  const Divider(),
+                  _buildDetectionRow(
+                      'No disease detected', Colors.green, formattedDateTime),
+                  const Divider(height: 3),
+                  _buildDetectionRow(
+                      'Malaria Detected', Colors.red, formattedDateTime),
+                  const Divider(height: 3),
                 ],
               ),
             ),
@@ -81,16 +109,20 @@ class PatientRecordCard extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Icon(Icons.date_range),
-            const SizedBox(width: 5),
-            Text(date), // Replace with actual date
+            const Icon(Icons.date_range, size: 15),
+            Text(
+              date,
+              style: const TextStyle(fontSize: 12),
+            ), // Replace with actual date
           ],
         ),
         Row(
           children: [
-            Icon(Icons.circle, color: color),
-            const SizedBox(width: 5),
-            Text(text),
+            Icon(Icons.circle, color: color, size: 15),
+            Text(
+              text,
+              style: const TextStyle(fontSize: 12),
+            ),
           ],
         ),
       ],

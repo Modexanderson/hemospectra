@@ -36,7 +36,7 @@ dependencies:
   camera: ^0.10.5+9
   carousel_slider: ^4.2.1
   carousel_indicator: ^1.0.6
-  fl_chart: ^0.66.2
+  country_state_city_picker: ^1.2.8
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
 
@@ -44,11 +44,13 @@ dependencies:
   cloud_firestore: ^4.13.3
   firebase_core: ^2.24.0
   firebase_auth: ^4.15.0
+  fl_chart: ^0.66.2
   flutter_native_splash: ^2.3.9
   google_sign_in: ^6.1.6
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   http: ^0.13.6
+  intl: ^0.18.0
   logger: ^2.0.2+1
   permission_handler: ^10.2.0
   rate_my_app: ^1.1.3

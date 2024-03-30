@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import '../exceptions/firebase_sign_up_exception.dart';
 import '../exceptions/messaged_firebase_auth_exception.dart';
 import '../models/size_config.dart';
+import '../screens/additional_information/additional_information_screen.dart';
 import '../services/authentification_service.dart';
 import '../utils/constants.dart';
 import 'async_progress_dialog.dart';
@@ -41,23 +42,17 @@ class _SignUpFormState extends State<SignUpForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(screenPadding)),
-        child: Column(
-          children: [
-            buildEmailFormField(),
-            SizedBox(height: getProportionateScreenHeight(30)),
-            buildPasswordFormField(),
-            SizedBox(height: getProportionateScreenHeight(30)),
-            buildConfirmPasswordFormField(),
-            SizedBox(height: getProportionateScreenHeight(40)),
-            CustomButton(
-              text: 'Sign Up',
-              onPressed: signUpButtonCallback,
-            ),
-          ],
-        ),
+      child: Column(
+        children: [
+          buildEmailFormField(),
+          buildPasswordFormField(),
+          buildConfirmPasswordFormField(),
+          SizedBox(height: getProportionateScreenHeight(40)),
+          CustomButton(
+            text: 'Sign Up',
+            onPressed: signUpButtonCallback,
+          ),
+        ],
       ),
     );
   }
@@ -67,7 +62,6 @@ class _SignUpFormState extends State<SignUpForm> {
       controller: confirmPasswordFieldController,
       obscureText: !isPasswordVisible,
       hintText: 'Re-enter password',
-      labelText: 'Confirm password',
       suffixIcon: GestureDetector(
         onTap: () {
           // Toggle the visibility of the password
@@ -76,7 +70,7 @@ class _SignUpFormState extends State<SignUpForm> {
           });
         },
         child: Icon(
-          isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+          isPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
         ),
       ),
       validator: (value) {
@@ -98,9 +92,8 @@ class _SignUpFormState extends State<SignUpForm> {
     return CustomTextFormField(
       controller: emailFieldController,
       keyboardType: TextInputType.emailAddress,
-      hintText: 'Enter email',
-      labelText: 'email',
-      suffixIcon: const Icon(Icons.mail),
+      hintText: 'Email',
+      suffixIcon: const Icon(Icons.mail_outline),
       validator: (value) {
         if (emailFieldController.text.isEmpty) {
           return AppStrings.getEmailNullError(context);
@@ -117,8 +110,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return CustomTextFormField(
       controller: passwordFieldController,
       obscureText: !isPasswordVisible,
-      hintText: 'Enter password',
-      labelText: 'Password',
+      hintText: 'Password',
       suffixIcon: GestureDetector(
         onTap: () {
           // Toggle the visibility of the password
@@ -127,7 +119,7 @@ class _SignUpFormState extends State<SignUpForm> {
           });
         },
         child: Icon(
-          isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+          isPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
         ),
       ),
       validator: (value) {
@@ -166,7 +158,12 @@ class _SignUpFormState extends State<SignUpForm> {
         if (signUpStatus == true) {
           snackbarMessage =
               'Registered successfully, Please verify your email id';
-          Navigator.pop(context);
+          // Navigator.pop(context);
+          Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdditionalInformationScreen(),
+                    ));
         } else {
           throw FirebaseSignUpAuthUnknownReasonFailureException(context);
         }
