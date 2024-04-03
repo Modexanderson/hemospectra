@@ -1,16 +1,18 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ScanningScreen extends StatefulWidget {
-  const ScanningScreen({super.key});
+  const ScanningScreen({Key? key}) : super(key: key);
 
   @override
-  State<ScanningScreen> createState() => _ScanningScreenState();
+  _ScanningScreenState createState() => _ScanningScreenState();
 }
 
 class _ScanningScreenState extends State<ScanningScreen> {
   late CameraController _cameraController;
   late Future<void> _initializeControllerFuture;
+  late XFile _imageFile;
 
   @override
   void initState() {
@@ -43,13 +45,38 @@ class _ScanningScreenState extends State<ScanningScreen> {
     super.dispose();
   }
 
+  // Future<void> _takePicture() async {
+  //   try {
+  //     await _initializeControllerFuture;
+  //     final path = (await getTemporaryDirectory()).path;
+  //     final imagePath = '$path/image.jpg'; // Adjust path and filename as needed
+  //     await _cameraController.takePicture(imagePath);
+  //     setState(() {
+  //       _imageFile = XFile(imagePath);
+  //     });
+  //     // Handle the captured image (e.g., display, process, or save)
+  //   } catch (e) {
+  //     // Handle any errors that occur during image capture
+  //     print(e);
+  //   }
+  // }
+
+  Future<void> _takePicture() async {
+    try {
+      await _initializeControllerFuture;
+      XFile? imageFile = await _cameraController.takePicture();
+      setState(() {
+        _imageFile = imageFile;
+      });
+      // Handle the captured image (e.g., display, process, or save)
+    } catch (e) {
+      // Handle any errors that occur during image capture
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (_cameraController == null || !_cameraController.value.isInitialized) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(40),
@@ -67,12 +94,32 @@ class _ScanningScreenState extends State<ScanningScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.flash_on_rounded),
+                    onPressed: () async {
+                      try {
+                        await _initializeControllerFuture;
+                        // Toggle flash mode (on or off)
+                        await _cameraController.setFlashMode(
+                          _cameraController.value.flashMode == FlashMode.off
+                              ? FlashMode.torch
+                              : FlashMode.off,
+                        );
+                        setState(() {});
+                      } catch (e) {
+                        print(e); // Handle errors
+                      }
+                    },
+                    icon: Icon(
+                      _cameraController.value.flashMode == FlashMode.off
+                          ? Icons.flash_off_rounded
+                          : Icons.flash_on_rounded,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),
@@ -92,7 +139,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
               },
             ),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(
                     5.0), // Same border radius as the elevated button
@@ -104,9 +151,9 @@ class _ScanningScreenState extends State<ScanningScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      Navigator.of(context).pop();
                       // Implement cancel functionality
                     },
-                    child: const Text('Cancel'),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
@@ -116,6 +163,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                         ),
                       ),
                     ),
+                    child: const Text('Cancel'),
                   ),
                   IconButton.outlined(
                     iconSize: 30,
@@ -131,7 +179,6 @@ class _ScanningScreenState extends State<ScanningScreen> {
                     onPressed: () {
                       // Implement capture functionality
                     },
-                    child: const Text('Done'),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
@@ -141,6 +188,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
                         ),
                       ),
                     ),
+                    child: const Text('Done'),
                   ),
                 ],
               ),

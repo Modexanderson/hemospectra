@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hemospectra/widgets/articles.dart';
 
-import '../../widgets/custom_search_bar.dart';
+import '../../widgets/search_field.dart';
 import '../drawer/drawer_menu.dart';
 
 class FavoriteArticlesScreen extends StatelessWidget {
@@ -33,13 +33,11 @@ class FavoriteArticlesScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomSearchBar(
-                controller: searchController,
-                onChanged: (value) {
-                  // Handle search functionality
-                  // For example, filter patient records based on the search query
-                },
-              ),
+              SearchField(
+            onSubmit: (value) async {
+              
+            },
+          ),
               const SizedBox(
                 height: 20,
               ),

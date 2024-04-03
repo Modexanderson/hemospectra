@@ -26,6 +26,9 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Needs to use device camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to your photo library to select images.</string>
+	</dict>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Needs to use device microphone</string>
 	<key>UILaunchStoryboardName</key>

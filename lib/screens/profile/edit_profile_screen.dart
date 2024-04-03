@@ -3,12 +3,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:hemospectra/services/database/user_database_helper.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
 import '../../services/authentification_service.dart';
+import '../../widgets/async_progress_dialog.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/form_field_container.dart';
+import '../../widgets/snack_bar.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String userUid;
@@ -34,7 +38,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final List<String> genders = ['Male', 'Female', 'Other'];
 
-  final List<String> roles = ['Role 1', 'Role 2', 'Role 3'];
+  final List<String> roles = [
+    'Pharmacist',
+    'Medical Dr',
+    'Nurse',
+    'Community health agent'
+  ];
 
   String? _selectedGender;
 
@@ -49,7 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   DateTime? _selectedDate;
 
-  Future<void> _updateProfile() async {
+  Future<void> updateProfileButtonCallback() async {
     final Map<String, dynamic> profileData = {
       'user_email': emailController.text,
       'phone': phoneNumberController.text,
@@ -62,29 +71,52 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       'role': _selectedRole,
     };
 
+    String? userId;
+    String? snackbarMessage;
+
     try {
-      // Get current user ID or any identifier
-      // final userId = 'user_id_example';
-      // Save the profile data to Firestore
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userUid)
-          .update(profileData);
-      print('Profile data saved to Firestore successfully');
+      final usertUpdateFuture =
+          UserDatabaseHelper().updateUserProfile(profileData);
+      usertUpdateFuture.then((value) {
+        userId = value;
+      });
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AsyncProgressDialog(
+            usertUpdateFuture,
+            progress: const CircularProgressIndicator(),
+          );
+        },
+      );
+      if (userId != null) {
+        snackbarMessage = "Patient Info updated successfully";
+      } else {
+        throw "Couldn't update patient info due to some unknown issue";
+      }
+      snackbarMessage = 'Profile data saved to Firestore successfully';
+    } on FirebaseException catch (e) {
+      Logger().w("Firebase Exception: $e");
+      snackbarMessage = "Something went wrong";
     } catch (e) {
-      print('Error saving profile data to Firestore: $e');
-      // Handle error as needed
+      Logger().w("Unknown Exception: $e");
+      snackbarMessage = e.toString();
+    } finally {
+      Logger().i(snackbarMessage);
+      ShowSnackBar().showSnackBar(context, snackbarMessage!);
     }
+    Navigator.pop(context);
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
     // Set initial values for controllers
-    nameController.text = widget.profileData['full_name'] ?? '';
-    emailController.text = widget.profileData['user_email'] ?? '';
-    phoneNumberController.text = widget.profileData['phone'] ?? '';
-    dobController.text = widget.profileData['date_of_birth'] ?? '';
+    nameController.text = widget.profileData['full_name'];
+    emailController.text = widget.profileData['user_email'];
+    phoneNumberController.text = widget.profileData['phone'];
+    dobController.text = widget.profileData['date_of_birth'];
   }
 
   @override
@@ -197,6 +229,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   const SizedBox(height: 16.0),
                   FormFieldContainer(
+                      label: 'Role Selection',
+                      child: CustomDropdown(
+                        hintText: widget.profileData['role'] ??
+                            (_selectedRole != null
+                                ? _selectedRole!
+                                : 'Select Role'),
+                        onPressed: () {
+                          // Call your function to handle role selection
+                          // For example, show a modal bottom sheet with role options
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: roles.map((role) {
+                                  return ListTile(
+                                    title: Text(role),
+                                    onTap: () {
+                                      // Update the selected role and close the bottom sheet
+                                      setState(() {
+                                        _selectedRole = role;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                  );
+                                }).toList(),
+                              );
+                            },
+                          );
+                        },
+                      )),
+                  const SizedBox(height: 16.0),
+                  FormFieldContainer(
                     label: 'Region',
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -231,9 +296,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: () async {
-                await _updateProfile();
-                Navigator.pop(context);
+              onPressed: () {
+                updateProfileButtonCallback();
+
                 // Implement edit profile functionality
               },
               style: ButtonStyle(

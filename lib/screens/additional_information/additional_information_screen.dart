@@ -29,7 +29,12 @@ class _AdditionalInformationScreenState
   final TextEditingController dobController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
   final List<String> genders = ['Male', 'Female', 'Other'];
-  final List<String> roles = ['Role 1', 'Role 2', 'Role 3'];
+  final List<String> roles = [
+    'Pharmacist',
+    'Medical Dr',
+    'Nurse',
+    'Community health agent'
+  ];
 
   String? _selectedGender;
   String? _selectedRole;
@@ -242,11 +247,11 @@ class _AdditionalInformationScreenState
               onPressed: () async {
                 await saveProfile();
                 Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Screens(),
-                ),
-              );
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Screens(),
+                  ),
+                );
                 // Implement edit profile functionality
               },
               style: ButtonStyle(

@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   final Widget? suffixIcon;
   final String? Function(String?)? validator;
   final AutovalidateMode autovalidateMode;
+  final int? maxLines;
 
   const CustomTextFormField({
     Key? key,
@@ -22,6 +23,7 @@ class CustomTextFormField extends StatelessWidget {
     this.suffixIcon,
     this.validator,
     this.autovalidateMode = AutovalidateMode.onUserInteraction,
+    this.maxLines,
   }) : super(key: key);
 
   @override
@@ -49,7 +51,7 @@ class CustomTextFormField extends StatelessWidget {
                   TextFormField(
                     initialValue: initialValue,
                     controller: controller,
-                    obscureText: obscureText,
+                    obscureText: obscureText && maxLines == 1,
                     keyboardType: keyboardType,
                     decoration: InputDecoration(
                       filled: true,
@@ -67,13 +69,14 @@ class CustomTextFormField extends StatelessWidget {
                     ),
                     validator: validator,
                     autovalidateMode: autovalidateMode,
+                    maxLines: maxLines,
                   ),
                 ],
               ))
           : TextFormField(
               initialValue: initialValue,
               controller: controller,
-              obscureText: obscureText,
+              obscureText: obscureText && maxLines == 1,
               keyboardType: keyboardType,
               decoration: InputDecoration(
                 filled: true,
@@ -91,6 +94,7 @@ class CustomTextFormField extends StatelessWidget {
               ),
               validator: validator,
               autovalidateMode: autovalidateMode,
+              maxLines: maxLines,
             ),
     );
   }

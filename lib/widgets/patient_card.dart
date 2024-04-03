@@ -1,18 +1,31 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../models/patient.dart';
 import '../models/patient_record.dart';
 
-class PatientRecordCard extends StatelessWidget {
-  final PatientRecord patientRecord;
+class PatientCard extends StatelessWidget {
+  final Patient patient;
 
-  const PatientRecordCard({super.key, required this.patientRecord});
+  const PatientCard({super.key, required this.patient});
+
+  int _calculateAge(DateTime dateOfBirth) {
+    final now = DateTime.now();
+    int age = now.year - dateOfBirth.year;
+    if (now.month < dateOfBirth.month ||
+        (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
+      age--;
+    }
+    return age;
+  }
 
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
+    int age = _calculateAge(patient.dateOfBirth!);
 
     // Format the date and time
-    String formattedDateTime = "${now.day}/${now.month}/${now.year}";
+    String formattedDateTime =
+        "${patient.diagnosisDate!.day}/${patient.diagnosisDate!.month}/${patient.diagnosisDate!.year}";
     return Card(
       elevation: 3,
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -24,8 +37,7 @@ class PatientRecordCard extends StatelessWidget {
             CachedNetworkImage(
               width: 100,
               height: 100,
-              imageUrl:
-                  "https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&w=600",
+              imageUrl: patient.image!,
               placeholder: (context, url) =>
                   const Center(child: CircularProgressIndicator()),
               errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -49,38 +61,39 @@ class PatientRecordCard extends StatelessWidget {
                     CrossAxisAlignment.start, // Align text to the left
                 children: [
                   Text(
-                    patientRecord.name,
+                    patient.fullName!,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
                   ),
                   // Age and Gender
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.square,
                             color: Colors.red,
                             size: 15,
                           ),
                           Text(
-                            'Age: 60',
-                            style: TextStyle(fontSize: 12),
+                            'Age: $age',
+                            style: const TextStyle(fontSize: 12),
                           ),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Icon(Icons.square, color: Colors.green, size: 15),
-                          SizedBox(width: 5),
+                          const Icon(Icons.square,
+                              color: Colors.green, size: 15),
+                          const SizedBox(width: 5),
                           Text(
-                            'Gender: Male',
-                            style: TextStyle(fontSize: 12),
+                            'Gender: ${patient.gender}',
+                            style: const TextStyle(fontSize: 12),
                           ),
                         ],
                       ),
@@ -89,10 +102,18 @@ class PatientRecordCard extends StatelessWidget {
                   const Divider(height: 3),
                   // Disease detection
                   _buildDetectionRow(
-                      'No disease detected', Colors.green, formattedDateTime),
+                      patient.diagnosis!,
+                      patient.diagnosis == 'No disease detected'
+                          ? Colors.green
+                          : Colors.red,
+                      formattedDateTime),
                   const Divider(height: 3),
                   _buildDetectionRow(
-                      'Malaria Detected', Colors.red, formattedDateTime),
+                      patient.diagnosis!,
+                      patient.diagnosis == 'No disease detected'
+                          ? Colors.green
+                          : Colors.red,
+                      formattedDateTime),
                   const Divider(height: 3),
                 ],
               ),

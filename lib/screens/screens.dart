@@ -41,7 +41,7 @@ class _ScreensState extends State<Screens> {
           ),
         ],
       ),
-      drawer: DrawerMenu(),
+      drawer: const DrawerMenu(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: IndexedStack(
