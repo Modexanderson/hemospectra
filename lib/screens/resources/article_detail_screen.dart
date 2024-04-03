@@ -17,19 +17,19 @@ class ArticleDetailScreen extends StatelessWidget {
           ),
           onPressed: Navigator.of(context).pop,
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.share),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite_border),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {},
+        //     icon: const Icon(Icons.share),
+        //   ),
+        //   const SizedBox(
+        //     width: 20,
+        //   ),
+        //   IconButton(
+        //     onPressed: () {},
+        //     icon: const Icon(Icons.favorite_border),
+        //   ),
+        // ],
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hemospectra/models/patient.dart';
 import 'package:logger/logger.dart';
@@ -93,6 +94,22 @@ class PatientDetailsScreen extends StatelessWidget {
                       subtitle: patient.gender ?? '',
                     ),
                     CustomListTile(
+                      title: 'Marital Status',
+                      subtitle: patient.maritalStatus ?? '',
+                    ),
+                    CustomListTile(
+                      title: 'Blood Group',
+                      subtitle: patient.bloodGroup ?? '',
+                    ),
+                    CustomListTile(
+                      title: 'Height',
+                      subtitle: '${patient.height}cm' ?? '',
+                    ),
+                    CustomListTile(
+                      title: 'Genotype',
+                      subtitle: patient.genotype ?? '',
+                    ),
+                    CustomListTile(
                       title: 'Email',
                       subtitle: patient.email ?? '',
                     ),
@@ -138,6 +155,28 @@ class PatientDetailsScreen extends StatelessWidget {
                     ),
 
                     SizedBox(height: getProportionateScreenHeight(5)),
+                    SizedBox(
+                      height: 200,
+                      width: 100,
+                      child: CachedNetworkImage(
+                        imageUrl: patient.scannedImage ?? '',
+                        placeholder: (context, url) =>
+                            const Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        imageBuilder: (context, imageProvider) => Container(
+                          height: MediaQuery.of(context).size.height / 3,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                10), // Adjust the value as needed
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {

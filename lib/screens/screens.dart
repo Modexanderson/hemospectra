@@ -1,9 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
+import '../services/authentification_service.dart';
+import '../widgets/async_progress_dialog.dart';
+import '../widgets/show_confirmation_dialog.dart';
 import 'drawer/drawer_menu.dart';
 import 'home/home_screen.dart';
+import 'manage_patients/edit_patient_screen.dart';
 import 'resources/resources_screen.dart';
-import 'scanning/scanning_screen.dart';
 import 'test/test_screen.dart';
 
 class Screens extends StatefulWidget {
@@ -32,14 +37,14 @@ class _ScreensState extends State<Screens> {
           _titles[_selectedIndex],
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // Handle notification button press
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.notifications_outlined),
+        //     onPressed: () {
+        //       // Handle notification button press
+        //     },
+        //   ),
+        // ],
       ),
       drawer: const DrawerMenu(),
       body: Padding(
@@ -142,12 +147,41 @@ class _ScreensState extends State<Screens> {
       floatingActionButton: _selectedIndex ==
               1 // Check if the selected index is for the TestScreen
           ? FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
+                bool allowed = AuthentificationService().currentUserVerified;
+                if (!allowed) {
+                  final reverify = await showConfirmationDialog(context,
+                      "You haven't verified your email address. This action is only allowed for verified users.",
+                      positiveResponse: "Resend verification email",
+                      negativeResponse: "Go back");
+                  if (reverify) {
+                    final future = AuthentificationService()
+                        .sendVerificationEmailToCurrentUser();
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AsyncProgressDialog(
+                          future,
+                          // message: const Text("Resending verification email"),
+                        );
+                      },
+                    );
+                  }
+                  return;
+                }
+
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ScanningScreen(),
-                    ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditPatientScreen(
+                        patientToEdit: null, navigateToScan: true),
+                  ),
+                );
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const ScanningScreen(),
+                //     ));
                 // Handle scan action here
               },
               child: const Icon(

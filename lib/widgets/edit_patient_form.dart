@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import '../exceptions/local_files_handling_exception.dart';
 import '../models/size_config.dart';
 import '../screens/provider_models/patient_details.dart';
+import '../screens/scanning/scanning_screen.dart';
 import '../services/authentification_service.dart';
 import '../services/firestore_files_access/firestore_files_access_service.dart';
 import '../services/local_files_access/local_files_access_service.dart';
@@ -27,9 +28,11 @@ import 'form_field_container.dart';
 
 class EditPatientForm extends StatefulWidget {
   final Patient? patient;
+  final bool? navigateToScan;
   const EditPatientForm({
     Key? key,
     this.patient,
+    this.navigateToScan,
   }) : super(key: key);
 
   @override
@@ -48,11 +51,34 @@ class _EditPatientFormState extends State<EditPatientForm> {
 
   final TextEditingController phoneNumberFieldController =
       TextEditingController();
+  final TextEditingController heightFieldController = TextEditingController();
   final TextEditingController emailFieldController = TextEditingController();
   final TextEditingController desciptionFieldController =
       TextEditingController();
 
   final List<String> genders = ['Male', 'Female', 'Other'];
+  final List<String> maritalStatuses = [
+    'Single',
+    'Married',
+  ];
+  final List<String> bloodGroups = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
+  ];
+  final List<String> genotypes = [
+    'AA',
+    'AS',
+    'AC',
+    'SS',
+    'SC',
+    'CC',
+  ];
   final List<String> diagnosis = [
     'No disease detected',
     'Malaria',
@@ -64,11 +90,18 @@ class _EditPatientFormState extends State<EditPatientForm> {
 
   String? _selectedGender;
 
+  String? _selectedMaritalStatus;
+
+  String? _selectedBloodGroup;
+
+  String? _selectedGenotype;
+
   String? _selectedDIagnosis;
 
   String? selectedCountry;
 
   String? selectedState;
+
   String? selectedCity;
 
   List<String> stateNames = [];
@@ -86,6 +119,7 @@ class _EditPatientFormState extends State<EditPatientForm> {
     dobFieldController.dispose();
     diagnosisDateFieldController.dispose();
     phoneNumberFieldController.dispose();
+    heightFieldController.dispose();
     emailFieldController.dispose();
 
     super.dispose();
@@ -131,6 +165,7 @@ class _EditPatientFormState extends State<EditPatientForm> {
       fullNameFieldController.text = patient!.fullName.toString();
       dobFieldController.text = patient!.dateOfBirth.toString();
       phoneNumberFieldController.text = patient!.phone.toString();
+      heightFieldController.text = patient!.height.toString();
       emailFieldController.text = patient!.email.toString();
       desciptionFieldController.text = patient!.description!;
     }
@@ -160,7 +195,15 @@ class _EditPatientFormState extends State<EditPatientForm> {
           SizedBox(height: getProportionateScreenHeight(20)),
           buildPhoneNumberField(),
           SizedBox(height: getProportionateScreenHeight(20)),
+          buildBloodGroupField(),
+          SizedBox(height: getProportionateScreenHeight(20)),
+          buildHeightField(),
+          SizedBox(height: getProportionateScreenHeight(20)),
+          buildGenotypeField(),
+          SizedBox(height: getProportionateScreenHeight(20)),
           buildGenderField(),
+          SizedBox(height: getProportionateScreenHeight(20)),
+          buildMaritalStatusField(),
           SizedBox(height: getProportionateScreenHeight(20)),
           buildDateOfBirthField(),
           SizedBox(height: getProportionateScreenHeight(20)),
@@ -175,6 +218,11 @@ class _EditPatientFormState extends State<EditPatientForm> {
       patient?.fullName = fullNameFieldController.text;
       patient?.email = emailFieldController.text;
       patient?.phone = phoneNumberFieldController.text;
+      patient?.height = double.parse(heightFieldController.text) ;
+      patient?.gender = _selectedGender;
+      patient?.maritalStatus = _selectedMaritalStatus;
+      patient?.bloodGroup = _selectedBloodGroup;
+      patient?.genotype = _selectedGenotype;
       patient?.gender = _selectedGender;
       patient?.dateOfBirth = _selectedDateOfBirth;
 
@@ -338,6 +386,16 @@ class _EditPatientFormState extends State<EditPatientForm> {
     );
   }
 
+  Widget buildHeightField() {
+    return CustomTextFormField(
+      labelText: 'Height',
+      // initialValue: profileData['phone'] ?? '',
+      hintText: 'e.g., 123 (in centimeters)',
+      keyboardType: TextInputType.number,
+      controller: heightFieldController,
+    );
+  }
+
   Widget buildDescriptionField() {
     return CustomTextFormField(
       controller: desciptionFieldController,
@@ -456,6 +514,110 @@ class _EditPatientFormState extends State<EditPatientForm> {
                       // Update the selected gender and close the bottom sheet
                       setState(() {
                         _selectedGender = gender;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  );
+                }).toList(),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildMaritalStatusField() {
+    return FormFieldContainer(
+      label: 'Marital Status',
+      child: CustomDropdown(
+        hintText: _selectedMaritalStatus != null
+            ? _selectedMaritalStatus!
+            : 'Select Marital Status',
+        onPressed: () {
+          // Call your function to handle gender selection
+          // For example, show a modal bottom sheet with gender options
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: maritalStatuses.map((maritalStatus) {
+                  return ListTile(
+                    title: Text(maritalStatus),
+                    onTap: () {
+                      // Update the selected gender and close the bottom sheet
+                      setState(() {
+                        _selectedMaritalStatus = maritalStatus;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  );
+                }).toList(),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildBloodGroupField() {
+    return FormFieldContainer(
+      label: 'Blood Group',
+      child: CustomDropdown(
+        hintText: _selectedBloodGroup != null
+            ? _selectedBloodGroup!
+            : 'Select Blood Group',
+        onPressed: () {
+          // Call your function to handle gender selection
+          // For example, show a modal bottom sheet with gender options
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: bloodGroups.map((bloodGroup) {
+                  return ListTile(
+                    title: Text(bloodGroup),
+                    onTap: () {
+                      // Update the selected gender and close the bottom sheet
+                      setState(() {
+                        _selectedBloodGroup = bloodGroup;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  );
+                }).toList(),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildGenotypeField() {
+    return FormFieldContainer(
+      label: 'Genotype',
+      child: CustomDropdown(
+        hintText:
+            _selectedGenotype != null ? _selectedGenotype! : 'Select Genotype',
+        onPressed: () {
+          // Call your function to handle gender selection
+          // For example, show a modal bottom sheet with gender options
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: genotypes.map((genotype) {
+                  return ListTile(
+                    title: Text(genotype),
+                    onTap: () {
+                      // Update the selected gender and close the bottom sheet
+                      setState(() {
+                        _selectedGenotype = genotype;
                       });
                       Navigator.of(context).pop();
                     },
@@ -606,7 +768,15 @@ class _EditPatientFormState extends State<EditPatientForm> {
       Logger().i(snackbarMessage);
       ShowSnackBar().showSnackBar(context, snackbarMessage!);
     }
-    Navigator.pop(context);
+    widget.navigateToScan == true
+        ? Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ScanningScreen(
+                patientId: patientId!,
+              ),
+            ))
+        : Navigator.pop(context);
   }
 
   Future<bool> uploadPatientImage(String patientId) async {

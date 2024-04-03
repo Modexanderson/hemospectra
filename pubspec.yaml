@@ -64,6 +64,7 @@ dependencies:
 
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.13.1"
   flutter_test:
     sdk: flutter
 
@@ -81,8 +82,10 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/"
+  image_path: "assets/icons/hemospectra.jpeg"
   background_color: "#ffffff"
+# flutter pub run flutter_launcher_icons:main
+
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -127,14 +130,14 @@ flutter:
 flutter_native_splash:
   color: "#ffffff"
   color_dark: "#080812"
-  image: assets/
+  image: assets/images/hemospectra.jpeg
   # Android 12 handles the splash screen differently than previous versions.  Please visit
   # https://developer.android.com/guide/topics/ui/splash-screen
   # Following are Android 12 specific parameter.
   android_12:
     color: "#ffffff"
     color_dark: "#080812"
-    image: assets/
+    image: assets/images/hemospectra.jpeg
     fullscreen: true
   web: false
 # dart run flutter_native_splash:create

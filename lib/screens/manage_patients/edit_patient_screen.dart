@@ -9,8 +9,9 @@ import '../../widgets/edit_patient_form.dart';
 
 class EditPatientScreen extends StatelessWidget {
   final Patient? patientToEdit;
+  final bool? navigateToScan;
 
-  const EditPatientScreen({Key? key, required this.patientToEdit})
+  const EditPatientScreen({Key? key, this.navigateToScan, required this.patientToEdit})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class EditPatientScreen extends StatelessWidget {
                   style: headingStyle,
                 ),
                 SizedBox(height: getProportionateScreenHeight(30)),
-                EditPatientForm(patient: patientToEdit),
+                EditPatientForm(patient: patientToEdit, navigateToScan: navigateToScan),
                 SizedBox(height: getProportionateScreenHeight(30)),
               ],
             ),

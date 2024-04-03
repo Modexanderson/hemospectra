@@ -157,4 +157,8 @@ class PatientDatabaseHelper {
     String path = "patients/image/$id";
     return path + "_$index";
   }
+  String getPathForScannedImage(String id, int index) {
+    String path = "patients/scans/$id";
+    return "${path}_$index";
+  }
 }

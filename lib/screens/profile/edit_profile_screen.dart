@@ -113,10 +113,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     // Set initial values for controllers
-    nameController.text = widget.profileData['full_name'];
-    emailController.text = widget.profileData['user_email'];
-    phoneNumberController.text = widget.profileData['phone'];
-    dobController.text = widget.profileData['date_of_birth'];
+    nameController.text = widget.profileData['full_name'] ?? '';
+    emailController.text = widget.profileData['user_email'] ?? '';
+    phoneNumberController.text = widget.profileData['phone'] ?? '';
+    dobController.text = widget.profileData['date_of_birth'] ?? '';
   }
 
   @override

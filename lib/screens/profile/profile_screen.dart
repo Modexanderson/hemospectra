@@ -54,14 +54,14 @@ class ProfileScreen extends StatelessWidget {
           'Profile',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // Handle notification button press
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.notifications_outlined),
+        //     onPressed: () {
+        //       // Handle notification button press
+        //     },
+        //   ),
+        // ],
       ),
       drawer: const DrawerMenu(),
       body: FutureBuilder<Map<String, dynamic>>(
@@ -101,7 +101,8 @@ class ProfileScreen extends StatelessWidget {
                                       color: Colors.white,
                                       icon: const Icon(Icons.edit),
                                       onPressed: () {
-                                        getImageFromUser(context, bodyState);
+                                        selectAndUploadImage(
+                                            context, bodyState);
                                         // Navigate to edit profile screen
                                       },
                                     ),
@@ -217,16 +218,14 @@ class ProfileScreen extends StatelessWidget {
         if (bodyState.chosenImage != null) {
           backImage = MemoryImage(bodyState.chosenImage!.readAsBytesSync());
         } else if (snapshot.hasData && snapshot.data != null) {
-          // final dynamic data = snapshot.data;
-          // final String? url = data[UserDatabaseHelper.DP_KEY];
-          // if (url != null) backImage = NetworkImage(url);
+          
           final DocumentSnapshot<Map<String, dynamic>>? data =
               snapshot.data as DocumentSnapshot<Map<String, dynamic>>?;
           final Map<String, dynamic>? userData = data?.data();
           if (userData != null && userData.containsKey('display_picture')) {
             final String? url = userData['display_picture'];
             if (url != null) {
-              backImage = NetworkImage(url);
+              backImage =  NetworkImage(url);
             }
           }
         }
@@ -239,19 +238,32 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  void getImageFromUser(BuildContext context, ChosenImage bodyState) async {
+  void selectAndUploadImage(BuildContext context, ChosenImage bodyState) async {
     String? path;
     String? snackbarMessage;
     try {
+      // Select an image from the local files
       path = await choseImageFromLocalFiles(context);
       if (path == null) {
         throw LocalImagePickingUnknownReasonFailureException();
       }
+
+      // Set the chosen image in the body state
+      bodyState.setChosenImage = File(path);
+
+      // Upload the selected image to Firestore
+      final downloadUrl = await uploadImageToFirestore(context, bodyState);
+
+      // Update the display picture URL in the database
+      await UserDatabaseHelper()
+          .uploadDisplayPictureForCurrentUser(downloadUrl);
+
+      snackbarMessage = "Display Picture updated successfully";
     } on LocalFileHandlingException catch (e) {
       Logger().i("LocalFileHandlingException: $e");
       snackbarMessage = e.toString();
     } catch (e) {
-      Logger().i("LocalFileHandlingException: $e");
+      Logger().i("Unknown Exception: $e");
       snackbarMessage = e.toString();
     } finally {
       if (snackbarMessage != null) {
@@ -259,69 +271,21 @@ class ProfileScreen extends StatelessWidget {
         ShowSnackBar().showSnackBar(context, snackbarMessage);
       }
     }
-    if (path == null) {
-      return;
-    }
-    bodyState.setChosenImage = File(path);
   }
 
-  Widget buildChosePictureButton(BuildContext context, ChosenImage bodyState) {
-    return CustomButton(
-      text: "Choose Picture",
-      onPressed: () {
-        getImageFromUser(context, bodyState);
-      },
-    );
-  }
-
-  Widget buildUploadPictureButton(BuildContext context, ChosenImage bodyState) {
-    return CustomButton(
-      text: "Upload Picture",
-      onPressed: () {
-        final Future uploadFuture =
-            uploadImageToFirestorage(context, bodyState);
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AsyncProgressDialog(
-              uploadFuture,
-            );
-          },
-        );
-        ShowSnackBar().showSnackBar(context, 'Display Picture updated');
-      },
-    );
-  }
-
-  Future<void> uploadImageToFirestorage(
+  Future<String> uploadImageToFirestore(
       BuildContext context, ChosenImage bodyState) async {
-    bool uploadDisplayPictureStatus = false;
-    String? snackbarMessage;
     try {
       final downloadUrl = await FirestoreFilesAccess().uploadFileToPath(
           bodyState.chosenImage!,
           UserDatabaseHelper().getPathForCurrentUserDisplayPicture());
-
-      uploadDisplayPictureStatus = await UserDatabaseHelper()
-          .uploadDisplayPictureForCurrentUser(downloadUrl);
-      if (uploadDisplayPictureStatus == true) {
-        snackbarMessage = "Display Picture updated successfully";
-      } else {
-        throw "Coulnd't update display picture due to unknown reason";
-      }
+      return downloadUrl;
     } on FirebaseException catch (e) {
       Logger().w("Firebase Exception: $e");
-      snackbarMessage = "Something went wrong";
+      throw "Something went wrong";
     } catch (e) {
       Logger().w("Unknown Exception: $e");
-      snackbarMessage = "Something went wrong";
-    } finally {
-      Logger().i(snackbarMessage);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(snackbarMessage!),
-        ),
-      );
+      throw "Something went wrong";
     }
   }
 
